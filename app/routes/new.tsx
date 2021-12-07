@@ -117,7 +117,7 @@ export default function NewRoute() {
         <p>
           <button
             type="submit"
-            disabled={transition.state === 'submitting'}
+            disabled={!!transition.submission}
             className="px-4 py-2 text-white bg-blue-300 border border-blue-300 rounded-md hover:bg-white hover:text-blue-300"
           >
             {transition.submission ? 'posting...' : 'Submit'}
