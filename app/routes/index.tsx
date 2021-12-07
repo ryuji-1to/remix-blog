@@ -1,10 +1,15 @@
+import type { Article } from '@prisma/client';
 import { PrismaClient } from '@prisma/client';
-import type { LoaderFunction, MetaFunction } from 'remix';
+import type {
+  ErrorBoundaryComponent,
+  LoaderFunction,
+  MetaFunction,
+} from 'remix';
 import { Link, useLoaderData } from 'remix';
 
-import { PageLinkButton } from '../components/PageLinkButton';
-import { MainLayout } from '../layouts/MainLayout';
-import type { Article } from '.prisma/client';
+import { ErrorMessage } from '~/components/ErrorMessage';
+import { PageLinkButton } from '~/components/PageLinkButton';
+import { MainLayout } from '~/layouts/MainLayout';
 
 export const loader: LoaderFunction = async () => {
   const prisma = new PrismaClient();
@@ -49,3 +54,11 @@ export default function IndexRoute() {
     </MainLayout>
   );
 }
+
+export const ErrorBoundary: ErrorBoundaryComponent = ({ error }) => {
+  return (
+    <MainLayout>
+      <ErrorMessage error={error?.message} />
+    </MainLayout>
+  );
+};

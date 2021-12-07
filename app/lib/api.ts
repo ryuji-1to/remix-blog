@@ -1,15 +1,15 @@
 import { PrismaClient } from '@prisma/client';
 
-export const sleep = (ms: number) => {
-  return new Promise((resolve) => {
-    return setTimeout(resolve, ms);
-  });
-};
-
 type Payload = {
   author: string;
   title: string;
   content: string;
+};
+
+export const sleep = (ms: number) => {
+  return new Promise((resolve) => {
+    return setTimeout(resolve, ms);
+  });
 };
 
 export const createArticle = async (payload: Payload) => {
@@ -48,5 +48,15 @@ export const editArticle = async (id: number, payload: Payload) => {
     await prisma.$disconnect();
 
     return { status: 'error' };
+  }
+};
+
+export const isString = (data: unknown): data is string => {
+  if (typeof data === 'string') {
+    if (!data.trim()) return false;
+
+    return true;
+  } else {
+    return false;
   }
 };

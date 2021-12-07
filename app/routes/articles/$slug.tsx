@@ -71,3 +71,13 @@ export default function SlugRoute() {
     </MainLayout>
   );
 }
+
+export const ErrorBoundary = () => {
+  return (
+    <MainLayout>
+      <div>
+        <p className="font-bold text-red-500">Error occurred</p>
+      </div>
+    </MainLayout>
+  );
+};

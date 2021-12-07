@@ -2,7 +2,7 @@ import type { ActionFunction } from 'remix';
 import { Form, json, redirect, useActionData, useTransition } from 'remix';
 
 import { MainLayout } from '../layouts/MainLayout';
-import { createArticle, sleep } from '../lib/';
+import { createArticle, isString, sleep } from '../lib/';
 
 export const meta = () => {
   return {
@@ -17,24 +17,7 @@ export const action: ActionFunction = async ({ request }) => {
   const author = body.get('author');
   const content = body.get('content');
 
-  const errors = {
-    title: false,
-    content: false,
-    author: false,
-  };
-
-  if (!title) errors.title = true;
-  if (!content) errors.content = true;
-  if (!author) errors.author = true;
-  if (Object.values(errors).includes(true)) {
-    return errors;
-  }
-
-  if (
-    typeof title === 'string' &&
-    typeof content === 'string' &&
-    typeof author === 'string'
-  ) {
+  if (isString(title) && isString(content) && isString(author)) {
     await sleep(2000);
     const result = await createArticle({ title, author, content });
     if (result.status === 'success') {
@@ -43,22 +26,20 @@ export const action: ActionFunction = async ({ request }) => {
       return json('error occurred', 500);
     }
   }
+
+  return json('invalid data!!!', 400);
 };
 
-export default function NewRoute() {
+export default function NewProject() {
   const transition = useTransition();
-  const errors = useActionData();
+  const error = useActionData();
 
   return (
     <MainLayout>
+      {error && <p className="text-lg font-bold text-red-500">{error}</p>}
       <Form method="post" className="flex flex-col space-y-4">
         <p className="flex flex-col">
-          <label htmlFor="author">
-            author
-            {errors?.author && (
-              <span className="text-red-500">author is required</span>
-            )}
-          </label>
+          <label htmlFor="author">author</label>
           <input
             type="text"
             name="author"
@@ -68,12 +49,7 @@ export default function NewRoute() {
           />
         </p>
         <p className="flex flex-col">
-          <label htmlFor="title">
-            title
-            {errors?.title && (
-              <span className="text-red-500">title is required</span>
-            )}
-          </label>
+          <label htmlFor="title">title</label>
           <input
             type="text"
             name="title"
@@ -83,12 +59,7 @@ export default function NewRoute() {
           />
         </p>
         <p className="flex flex-col">
-          <label htmlFor="content">
-            markdown{' '}
-            {errors?.content && (
-              <span className="text-red-500">content is required</span>
-            )}
-          </label>
+          <label htmlFor="content">markdown </label>
           <textarea
             rows={10}
             name="content"

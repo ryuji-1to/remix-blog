@@ -1,5 +1,4 @@
 import type { ReactNode } from 'react';
-import { Toaster } from 'react-hot-toast';
 import type { LinksFunction } from 'remix';
 import {
   Links,
@@ -46,7 +45,6 @@ export default function App() {
   return (
     <Document>
       <Outlet />
-      <Toaster />
     </Document>
   );
 }
