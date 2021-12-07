@@ -14,12 +14,39 @@ type Payload = {
 
 export const createPost = async (payload: Payload) => {
   const prisma = new PrismaClient();
-  const article = await prisma.article.create({
-    data: {
-      ...payload,
-    },
-  });
-  await prisma.$disconnect();
+  try {
+    await prisma.article.create({
+      data: {
+        ...payload,
+      },
+    });
+    await prisma.$disconnect();
 
-  return article;
+    return { status: 'success' };
+  } catch {
+    await prisma.$disconnect();
+
+    return { status: 'error' };
+  }
+};
+
+export const editArticle = async (id: number, payload: Payload) => {
+  const prisma = new PrismaClient();
+  try {
+    await prisma.article.update({
+      where: {
+        id: id,
+      },
+      data: {
+        ...payload,
+      },
+    });
+    await prisma.$disconnect();
+
+    return { status: 'success' };
+  } catch {
+    await prisma.$disconnect();
+
+    return { status: 'error' };
+  }
 };

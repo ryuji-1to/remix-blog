@@ -37,9 +37,12 @@ export const action: ActionFunction = async ({ request }) => {
     typeof author === 'string'
   ) {
     await sleep(2000);
-    await createPost({ title, author, content });
-
-    return redirect('/');
+    const result = await createPost({ title, author, content });
+    if (result.status === 'success') {
+      return redirect('/');
+    } else {
+      throw Error('Something went wrong');
+    }
   }
 };
 
