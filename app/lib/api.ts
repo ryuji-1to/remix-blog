@@ -12,7 +12,7 @@ type Payload = {
   content: string;
 };
 
-export const createPost = async (payload: Payload) => {
+export const createArticle = async (payload: Payload) => {
   const prisma = new PrismaClient();
   try {
     await prisma.article.create({

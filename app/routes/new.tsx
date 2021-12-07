@@ -1,9 +1,8 @@
-import toast from 'react-hot-toast';
 import type { ActionFunction } from 'remix';
-import { Form, redirect, useActionData, useTransition } from 'remix';
+import { Form, json, redirect, useActionData, useTransition } from 'remix';
 
 import { MainLayout } from '../layouts/MainLayout';
-import { createPost, sleep } from '../lib/';
+import { createArticle, sleep } from '../lib/';
 
 export const meta = () => {
   return {
@@ -37,11 +36,11 @@ export const action: ActionFunction = async ({ request }) => {
     typeof author === 'string'
   ) {
     await sleep(2000);
-    const result = await createPost({ title, author, content });
+    const result = await createArticle({ title, author, content });
     if (result.status === 'success') {
       return redirect('/');
     } else {
-      throw Error('Something went wrong');
+      return json('error occurred', 500);
     }
   }
 };
@@ -51,17 +50,7 @@ export default function NewRoute() {
   const errors = useActionData();
 
   return (
-    <MainLayout
-      rightElement={
-        <button
-          onClick={() => {
-            return toast.success('hello');
-          }}
-        >
-          toast
-        </button>
-      }
-    >
+    <MainLayout>
       <Form method="post" className="flex flex-col space-y-4">
         <p className="flex flex-col">
           <label htmlFor="author">
