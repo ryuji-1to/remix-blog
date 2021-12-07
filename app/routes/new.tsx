@@ -46,6 +46,7 @@ export const action: ActionFunction = async ({ request }) => {
         author,
       },
     });
+    await prisma.$disconnect();
 
     return redirect('/');
   }

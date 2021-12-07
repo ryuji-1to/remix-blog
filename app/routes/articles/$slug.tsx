@@ -1,7 +1,7 @@
 import type { Article } from '@prisma/client';
 import { PrismaClient } from '@prisma/client';
 import type { ActionFunction, LoaderFunction, MetaFunction } from 'remix';
-import { Form, redirect, useLoaderData } from 'remix';
+import { Form, Link, redirect, useLoaderData } from 'remix';
 
 import { MainLayout } from '../../layouts/MainLayout';
 
@@ -23,6 +23,7 @@ export const loader: LoaderFunction = async ({ params }) => {
   const article = await prisma.article.findUnique({
     where: { id: Number(slug) },
   });
+  await prisma.$disconnect();
   if (!article) {
     throw new Error('could not find the article');
   }
@@ -55,9 +56,17 @@ export default function SlugRoute() {
         <p>content : {data?.content}</p>
       </article>
       <Form method="post">
-        <button className="p-2 font-bold text-white bg-red-500 border border-red-500 rounded-md hover:bg-white hover:text-red-500">
-          Delete this
+        <button className="p-2 mr-2 font-bold text-white bg-red-500 border border-red-500 rounded-md hover:bg-white hover:text-red-500">
+          Delete
         </button>
+        <Link to="./edit">
+          <button
+            type="button"
+            className="p-2 font-bold text-white bg-blue-500 border border-blue-500 rounded-md hover:bg-white hover:text-blue-500"
+          >
+            Edit
+          </button>
+        </Link>
       </Form>
     </MainLayout>
   );

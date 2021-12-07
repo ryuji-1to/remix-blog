@@ -10,6 +10,7 @@ export const loader: LoaderFunction = async () => {
   const prisma = new PrismaClient();
   try {
     const articles = await prisma.article.findMany();
+    await prisma.$disconnect();
 
     return articles;
   } catch (error) {
@@ -34,7 +35,7 @@ export default function IndexRoute() {
         {data?.map((article: Article) => {
           return (
             <li key={article.id}>
-              👉
+              👉{' '}
               <Link
                 className="text-lg hover:underline"
                 to={`/articles/${article.id}`}
