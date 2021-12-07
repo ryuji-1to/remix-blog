@@ -1,10 +1,9 @@
-import { PrismaClient } from '@prisma/client';
 import toast from 'react-hot-toast';
 import type { ActionFunction } from 'remix';
 import { Form, redirect, useActionData, useTransition } from 'remix';
 
 import { MainLayout } from '../layouts/MainLayout';
-import { sleep } from '../lib/api';
+import { createPost, sleep } from '../lib/';
 
 export const meta = () => {
   return {
@@ -14,7 +13,6 @@ export const meta = () => {
 };
 
 export const action: ActionFunction = async ({ request }) => {
-  const prisma = new PrismaClient();
   const body = await request.formData();
   const title = body.get('title');
   const author = body.get('author');
@@ -39,14 +37,7 @@ export const action: ActionFunction = async ({ request }) => {
     typeof author === 'string'
   ) {
     await sleep(2000);
-    await prisma.article.create({
-      data: {
-        title,
-        content,
-        author,
-      },
-    });
-    await prisma.$disconnect();
+    await createPost({ title, author, content });
 
     return redirect('/');
   }
