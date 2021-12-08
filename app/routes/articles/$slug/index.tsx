@@ -27,6 +27,7 @@ export const action: ActionFunction = async ({ params }) => {
 
     return redirect('/');
   } catch {
+    await prisma.$disconnect();
     throw Error('Failed to delete article');
   }
 };
