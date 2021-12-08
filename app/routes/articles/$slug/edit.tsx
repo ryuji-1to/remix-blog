@@ -18,7 +18,6 @@ import {
 } from 'remix';
 
 import { ErrorMessage } from '~/components/ErrorMessage';
-import { MainLayout } from '~/layouts/MainLayout';
 import { editArticle, isString, sleep } from '~/lib';
 
 export const action: ActionFunction = async ({ request, params }) => {
@@ -30,7 +29,7 @@ export const action: ActionFunction = async ({ request, params }) => {
 
   const article = await prisma.article.findUnique({
     where: {
-      id: Number(params.slugId),
+      id: Number(params.slug),
     },
   });
 
@@ -42,7 +41,7 @@ export const action: ActionFunction = async ({ request, params }) => {
 
   if (isString(title) && isString(author) && isString(content)) {
     await sleep(1000);
-    const result = await editArticle(Number(params.slugId), {
+    const result = await editArticle(Number(params.slug), {
       title,
       author,
       content,
@@ -62,7 +61,7 @@ export const loader: LoaderFunction = async ({ params }) => {
   const prisma = new PrismaClient();
   const article = await prisma.article.findUnique({
     where: {
-      id: Number(params.slugId),
+      id: Number(params.slug),
     },
   });
   await prisma.$disconnect();
@@ -93,7 +92,7 @@ export default function Edit() {
   const actionData = useActionData();
 
   return (
-    <MainLayout>
+    <>
       {actionData && <p className="text-red-500">{actionData}</p>}
       <Form method="post" className="flex flex-col space-y-3">
         <input
@@ -124,7 +123,7 @@ export default function Edit() {
           {transition.submission ? 'Saving...' : 'Edit'}
         </button>
       </Form>
-    </MainLayout>
+    </>
   );
 }
 
@@ -133,20 +132,14 @@ export const CatchBoundary = () => {
   const params = useParams();
   if (caught.status === 404) {
     return (
-      <MainLayout>
-        <p className="text-lg font-bold text-red-400">
-          404:Article {params.slugId} is not found!!!
-        </p>
-      </MainLayout>
+      <p className="text-lg font-bold text-red-400">
+        404:Article {params.slugId} is not found!!!
+      </p>
     );
   }
   throw Error('Unexpected error');
 };
 
 export const ErrorBoundary: ErrorBoundaryComponent = ({ error }) => {
-  return (
-    <MainLayout>
-      <ErrorMessage error={error?.message} />
-    </MainLayout>
-  );
+  return <ErrorMessage error={error?.message} />;
 };
