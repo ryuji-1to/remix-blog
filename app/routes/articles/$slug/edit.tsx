@@ -87,7 +87,7 @@ export const meta: MetaFunction = ({ data }: { data: Article }) => {
 };
 
 export default function Edit() {
-  const data = useLoaderData();
+  const data = useLoaderData<Article>();
   const transition = useTransition();
   const actionData = useActionData();
 

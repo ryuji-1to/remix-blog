@@ -62,12 +62,12 @@ export const meta: MetaFunction = ({ data }: { data: Article | undefined }) => {
 };
 
 export default function SlugRoute() {
-  const data = useLoaderData();
+  const data = useLoaderData<Article>();
 
   return (
     <>
       <article className="flex flex-col mb-4 space-y-4 prose">
-        <h1>Title : {data?.title}</h1>
+        <h1>{data?.title}</h1>
         <p className="text-xl">{data?.content}</p>
         <p>author 👉 {data?.author}</p>
       </article>

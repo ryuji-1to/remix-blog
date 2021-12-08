@@ -8,6 +8,7 @@
     "resolveJsonModule": true,
     "target": "es2019",
     "strict": true,
+    "noImplicitAny": true,
     "paths": {
       "~/*": ["./app/*"]
     },

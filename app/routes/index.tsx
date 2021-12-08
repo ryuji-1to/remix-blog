@@ -37,15 +37,15 @@ export default function IndexRoute() {
     <MainLayout rightElement={<PageLinkButton to="/new" label="New Post" />}>
       <nav>
         <h1 className="mb-2 text-xl font-bold">📚Articles</h1>
-        <ul className="flex flex-col space-y-1">
+        <ul className="flex flex-col space-y-2">
           {data?.map((article: Article) => {
             return (
               <li key={article.id}>
-                <Link
-                  className="text-lg hover:underline line-clamp-1"
-                  to={`/articles/${article.id}`}
-                >
-                  👉 {article.title}
+                <Link to={`/articles/${article.id}`} className="line-clamp-1">
+                  👉{' '}
+                  <span className="text-lg hover:underline">
+                    {article.title}
+                  </span>
                 </Link>
               </li>
             );
