@@ -41,12 +41,11 @@ export default function IndexRoute() {
           {data?.map((article: Article) => {
             return (
               <li key={article.id}>
-                👉{' '}
                 <Link
-                  className="text-lg hover:underline"
+                  className="text-lg hover:underline line-clamp-1"
                   to={`/articles/${article.id}`}
                 >
-                  {article.title}
+                  👉 {article.title}
                 </Link>
               </li>
             );
