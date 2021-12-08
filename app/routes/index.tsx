@@ -35,22 +35,24 @@ export default function IndexRoute() {
 
   return (
     <MainLayout rightElement={<PageLinkButton to="/new" label="New Post" />}>
-      <h1 className="mb-2 text-xl font-bold">📚Articles</h1>
-      <ul className="flex flex-col space-y-1">
-        {data?.map((article: Article) => {
-          return (
-            <li key={article.id}>
-              👉{' '}
-              <Link
-                className="text-lg hover:underline"
-                to={`/articles/${article.id}`}
-              >
-                {article.title}
-              </Link>
-            </li>
-          );
-        })}
-      </ul>
+      <nav>
+        <h1 className="mb-2 text-xl font-bold">📚Articles</h1>
+        <ul className="flex flex-col space-y-1">
+          {data?.map((article: Article) => {
+            return (
+              <li key={article.id}>
+                👉{' '}
+                <Link
+                  className="text-lg hover:underline"
+                  to={`/articles/${article.id}`}
+                >
+                  {article.title}
+                </Link>
+              </li>
+            );
+          })}
+        </ul>
+      </nav>
     </MainLayout>
   );
 }

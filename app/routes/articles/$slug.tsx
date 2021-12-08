@@ -67,10 +67,10 @@ export default function SlugRoute() {
 
   return (
     <MainLayout>
-      <article className="flex flex-col mb-4 space-y-4">
-        <h1 className="text-xl font-bold">Title : {data?.title}</h1>
-        <p>author : {data?.author}</p>
-        <p>content : {data?.content}</p>
+      <article className="flex flex-col mb-4 space-y-4 prose">
+        <h1>Title : {data?.title}</h1>
+        <p className="text-xl">{data?.content}</p>
+        <p>author 👉 {data?.author}</p>
       </article>
       <Form method="post">
         <button
