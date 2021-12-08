@@ -1,14 +1,23 @@
+import type { Article } from '@prisma/client';
 import { PrismaClient } from '@prisma/client';
-import type { ActionFunction, LoaderFunction } from 'remix';
+import type {
+  ActionFunction,
+  ErrorBoundaryComponent,
+  LoaderFunction,
+  MetaFunction,
+} from 'remix';
 import {
   Form,
   json,
   redirect,
   useActionData,
+  useCatch,
   useLoaderData,
+  useParams,
   useTransition,
 } from 'remix';
 
+import { ErrorMessage } from '~/components/ErrorMessage';
 import { MainLayout } from '~/layouts/MainLayout';
 import { editArticle, isString, sleep } from '~/lib';
 
@@ -58,10 +67,24 @@ export const loader: LoaderFunction = async ({ params }) => {
   });
   await prisma.$disconnect();
   if (!article) {
-    throw new Error('Article not found');
+    throw new Response('Article not found', { status: 404 });
   }
 
   return article;
+};
+
+export const meta: MetaFunction = ({ data }: { data: Article }) => {
+  if (!data) {
+    return {
+      title: 'Article not found',
+      description: 'Article not found',
+    };
+  }
+
+  return {
+    title: `Edit | ${data.title}`,
+    description: `Edit ${data.title}`,
+  };
 };
 
 export default function Edit() {
@@ -104,3 +127,26 @@ export default function Edit() {
     </MainLayout>
   );
 }
+
+export const CatchBoundary = () => {
+  const caught = useCatch();
+  const params = useParams();
+  if (caught.status === 404) {
+    return (
+      <MainLayout>
+        <p className="text-lg font-bold text-red-400">
+          404:Article {params.slugId} is not found!!!
+        </p>
+      </MainLayout>
+    );
+  }
+  throw Error('Unexpected error');
+};
+
+export const ErrorBoundary: ErrorBoundaryComponent = ({ error }) => {
+  return (
+    <MainLayout>
+      <ErrorMessage error={error?.message} />
+    </MainLayout>
+  );
+};

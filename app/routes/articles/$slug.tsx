@@ -1,20 +1,35 @@
 import type { Article } from '@prisma/client';
 import { PrismaClient } from '@prisma/client';
-import type { ActionFunction, LoaderFunction, MetaFunction } from 'remix';
-import { Form, Link, redirect, useLoaderData } from 'remix';
+import type {
+  ActionFunction,
+  ErrorBoundaryComponent,
+  LoaderFunction,
+  MetaFunction,
+} from 'remix';
+import {
+  Form,
+  Link,
+  redirect,
+  useCatch,
+  useLoaderData,
+  useParams,
+} from 'remix';
 
-import { MainLayout } from '../../layouts/MainLayout';
+import { ErrorMessage } from '~/components/ErrorMessage';
+import { MainLayout } from '~/layouts/MainLayout';
 
 export const action: ActionFunction = async ({ params }) => {
   const prisma = new PrismaClient();
-  const deletedArticle = await prisma.article.delete({
-    where: { id: Number(params.slug) },
-  });
-  if (!deletedArticle) {
-    throw Error('Article not found');
-  }
+  try {
+    await prisma.article.delete({
+      where: { id: Number(params.slug) },
+    });
+    await prisma.$disconnect();
 
-  return redirect('/');
+    return redirect('/');
+  } catch {
+    throw Error('Failed to delete article');
+  }
 };
 
 export const loader: LoaderFunction = async ({ params }) => {
@@ -25,7 +40,9 @@ export const loader: LoaderFunction = async ({ params }) => {
   });
   await prisma.$disconnect();
   if (!article) {
-    throw new Error('could not find the article');
+    throw new Response('could not find the article', {
+      status: 404,
+    });
   }
 
   return article;
@@ -56,7 +73,10 @@ export default function SlugRoute() {
         <p>content : {data?.content}</p>
       </article>
       <Form method="post">
-        <button className="p-2 mr-2 font-bold text-white bg-red-500 border border-red-500 rounded-md hover:bg-white hover:text-red-500">
+        <button
+          type="submit"
+          className="p-2 mr-2 font-bold text-white bg-red-500 border border-red-500 rounded-md hover:bg-white hover:text-red-500"
+        >
           Delete
         </button>
         <Link to="./edit">
@@ -72,12 +92,25 @@ export default function SlugRoute() {
   );
 }
 
-export const ErrorBoundary = () => {
+export const ErrorBoundary: ErrorBoundaryComponent = ({ error }) => {
   return (
     <MainLayout>
-      <div>
-        <p className="font-bold text-red-500">Error occurred</p>
-      </div>
+      <ErrorMessage error={error?.message} />
     </MainLayout>
   );
+};
+
+export const CatchBoundary = () => {
+  const caught = useCatch();
+  const params = useParams();
+  if (caught.status === 404) {
+    return (
+      <MainLayout>
+        <p className="text-lg font-bold text-red-400">
+          404 Article {params.slug} is not found!!!
+        </p>
+      </MainLayout>
+    );
+  }
+  throw Error('Unknown error');
 };

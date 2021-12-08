@@ -30,7 +30,7 @@ export const action: ActionFunction = async ({ request }) => {
   return json('invalid data!!!', 400);
 };
 
-export default function NewProject() {
+export default function NewArticle() {
   const transition = useTransition();
   const error = useActionData();
 

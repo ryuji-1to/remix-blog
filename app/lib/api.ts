@@ -60,3 +60,21 @@ export const isString = (data: unknown): data is string => {
     return false;
   }
 };
+
+export const deleteArticle = async (id: string) => {
+  const prisma = new PrismaClient();
+  try {
+    await prisma.article.delete({
+      where: {
+        id: Number(id),
+      },
+    });
+    await prisma.$disconnect();
+
+    return { status: 'success' };
+  } catch {
+    await prisma.$disconnect();
+
+    return { status: 'error' };
+  }
+};
