@@ -1,16 +1,8 @@
-import type { ActionFunction, LoaderFunction, MetaFunction } from 'remix';
+import { Outlet } from 'remix';
 
 import { MainLayout } from '~/layouts/MainLayout';
 
-export const action: ActionFunction = () => {
-  return null;
-};
-
-export const loader: LoaderFunction = () => {
-  return null;
-};
-
-export const meta: MetaFunction = () => {
+export const meta = () => {
   return {
     title: 'Admin route',
     description: 'This is admin route',
@@ -18,5 +10,9 @@ export const meta: MetaFunction = () => {
 };
 
 export default function AdminRoute() {
-  return <MainLayout>admin route</MainLayout>;
+  return (
+    <MainLayout>
+      <Outlet />
+    </MainLayout>
+  );
 }

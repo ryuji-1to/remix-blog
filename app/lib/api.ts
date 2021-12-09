@@ -1,4 +1,4 @@
-import { PrismaClient } from '@prisma/client';
+import { prisma } from '~/db.server';
 
 type Payload = {
   author: string;
@@ -12,45 +12,6 @@ export const sleep = (ms: number) => {
   });
 };
 
-export const createArticle = async (payload: Payload) => {
-  const prisma = new PrismaClient();
-  try {
-    await prisma.article.create({
-      data: {
-        ...payload,
-      },
-    });
-    await prisma.$disconnect();
-
-    return { status: 'success' };
-  } catch {
-    await prisma.$disconnect();
-
-    return { status: 'error' };
-  }
-};
-
-export const editArticle = async (id: number, payload: Payload) => {
-  const prisma = new PrismaClient();
-  try {
-    await prisma.article.update({
-      where: {
-        id: id,
-      },
-      data: {
-        ...payload,
-      },
-    });
-    await prisma.$disconnect();
-
-    return { status: 'success' };
-  } catch {
-    await prisma.$disconnect();
-
-    return { status: 'error' };
-  }
-};
-
 export const isString = (data: unknown): data is string => {
   if (typeof data === 'string') {
     if (!data.trim()) return false;
@@ -61,8 +22,39 @@ export const isString = (data: unknown): data is string => {
   }
 };
 
+export const createArticle = async (payload: Payload) => {
+  try {
+    await prisma.article.create({
+      data: {
+        ...payload,
+      },
+    });
+    await prisma.$disconnect();
+  } catch {
+    await prisma.$disconnect();
+    throw Error('error');
+  }
+};
+
+export const editArticle = async (id: number, payload: Payload) => {
+  try {
+    await prisma.article.update({
+      where: {
+        id: id,
+      },
+      data: {
+        ...payload,
+      },
+    });
+    await prisma.$disconnect();
+  } catch {
+    await prisma.$disconnect();
+
+    throw Error('error occurred');
+  }
+};
+
 export const deleteArticle = async (id: string) => {
-  const prisma = new PrismaClient();
   try {
     await prisma.article.delete({
       where: {
@@ -70,11 +62,33 @@ export const deleteArticle = async (id: string) => {
       },
     });
     await prisma.$disconnect();
-
-    return { status: 'success' };
   } catch {
     await prisma.$disconnect();
 
-    return { status: 'error' };
+    throw Error('Error deleting article');
   }
+};
+
+export const getAllArticles = async () => {
+  try {
+    const articles = await prisma.article.findMany();
+    await prisma.$disconnect();
+
+    return articles;
+  } catch {
+    await prisma.$disconnect();
+    throw new Error('error');
+  }
+};
+
+export const getArticleById = async (id: string) => {
+  const article = await prisma.article.findUnique({
+    where: {
+      id: Number(id),
+    },
+  });
+  await prisma.$disconnect();
+  if (!article) throw new Response('Article not found', { status: 404 });
+
+  return article;
 };

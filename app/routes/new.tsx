@@ -19,12 +19,9 @@ export const action: ActionFunction = async ({ request }) => {
 
   if (isString(title) && isString(content) && isString(author)) {
     await sleep(2000);
-    const result = await createArticle({ title, author, content });
-    if (result.status === 'success') {
-      return redirect('/');
-    } else {
-      return json('error occurred', 500);
-    }
+    await createArticle({ title, author, content });
+
+    return redirect('/');
   }
 
   return json('invalid data!!!', 400);

@@ -1,5 +1,4 @@
 import type { Article } from '@prisma/client';
-import { PrismaClient } from '@prisma/client';
 import type {
   ActionFunction,
   ErrorBoundaryComponent,
@@ -18,10 +17,10 @@ import {
 } from 'remix';
 
 import { ErrorMessage } from '~/components/ErrorMessage';
+import { prisma } from '~/db.server';
 import { editArticle, isString, sleep } from '~/lib';
 
 export const action: ActionFunction = async ({ request, params }) => {
-  const prisma = new PrismaClient();
   const formData = await request.formData();
   const title = formData.get('title');
   const author = formData.get('author');
@@ -41,24 +40,19 @@ export const action: ActionFunction = async ({ request, params }) => {
 
   if (isString(title) && isString(author) && isString(content)) {
     await sleep(1000);
-    const result = await editArticle(Number(params.slug), {
+    await editArticle(Number(params.slug), {
       title,
       author,
       content,
     });
 
-    if (result.status === 'success') {
-      return redirect(`/articles/${params.slugId}`);
-    } else {
-      return json('Error editing article', 500);
-    }
+    return redirect(`/articles/${params.slug}`);
   }
 
   return json('Invalid form data', 400);
 };
 
 export const loader: LoaderFunction = async ({ params }) => {
-  const prisma = new PrismaClient();
   const article = await prisma.article.findUnique({
     where: {
       id: Number(params.slug),

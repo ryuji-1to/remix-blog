@@ -1,36 +1,13 @@
 import type { Article } from '@prisma/client';
 import { PrismaClient } from '@prisma/client';
 import type {
-  ActionFunction,
   ErrorBoundaryComponent,
   LoaderFunction,
   MetaFunction,
 } from 'remix';
-import {
-  Form,
-  Link,
-  redirect,
-  useCatch,
-  useLoaderData,
-  useParams,
-} from 'remix';
+import { Form, Link, useCatch, useLoaderData, useParams } from 'remix';
 
 import { ErrorMessage } from '~/components/ErrorMessage';
-
-export const action: ActionFunction = async ({ params }) => {
-  const prisma = new PrismaClient();
-  try {
-    await prisma.article.delete({
-      where: { id: Number(params.slug) },
-    });
-    await prisma.$disconnect();
-
-    return redirect('/');
-  } catch {
-    await prisma.$disconnect();
-    throw Error('Failed to delete article');
-  }
-};
 
 export const loader: LoaderFunction = async ({ params }) => {
   const prisma = new PrismaClient();
@@ -72,12 +49,6 @@ export default function SlugRoute() {
         <p>author 👉 {data?.author}</p>
       </article>
       <Form method="post">
-        <button
-          type="submit"
-          className="p-2 mr-2 font-bold text-white bg-red-500 border border-red-500 rounded-md hover:bg-white hover:text-red-500"
-        >
-          Delete
-        </button>
         <Link to="./edit">
           <button
             type="button"
@@ -91,10 +62,6 @@ export default function SlugRoute() {
   );
 }
 
-export const ErrorBoundary: ErrorBoundaryComponent = ({ error }) => {
-  return <ErrorMessage error={error?.message} />;
-};
-
 export const CatchBoundary = () => {
   const caught = useCatch();
   const params = useParams();
@@ -106,4 +73,8 @@ export const CatchBoundary = () => {
     );
   }
   throw Error('Unknown error');
+};
+
+export const ErrorBoundary: ErrorBoundaryComponent = ({ error }) => {
+  return <ErrorMessage error={error?.message} />;
 };

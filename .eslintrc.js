@@ -21,7 +21,12 @@ module.exports = {
     ecmaVersion: 13,
     sourceType: 'module',
   },
-  plugins: ['react', '@typescript-eslint', 'simple-import-sort'],
+  plugins: [
+    'react',
+    '@typescript-eslint',
+    'simple-import-sort',
+    'prefer-arrow-functions',
+  ],
   rules: {
     'react/react-in-jsx-scope': 'off',
     'no-undef': 'error',
@@ -44,7 +49,11 @@ module.exports = {
     '@typescript-eslint/no-unsafe-member-access': 'error',
     '@typescript-eslint/typedef': [
       'error',
-      { arrayDestructuring: true, parameter: true },
+      {
+        arrayDestructuring: true,
+        parameter: true,
+        variableDeclarationIgnoreFunction: true,
+      },
     ],
     '@typescript-eslint/consistent-type-imports': [
       'warn',
