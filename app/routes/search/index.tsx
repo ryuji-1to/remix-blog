@@ -8,7 +8,6 @@ import { Link, useCatch, useLoaderData, useTransition } from 'remix';
 
 import { ErrorMessage } from '~/components/ErrorMessage';
 import { prisma } from '~/db.server';
-import { sleep } from '~/lib';
 
 export const loader: LoaderFunction = async ({ request }) => {
   const url = new URL(request.url);
@@ -16,7 +15,6 @@ export const loader: LoaderFunction = async ({ request }) => {
   if (searchParam === null) return null;
   if (typeof searchParam === 'string' && searchParam.trim()) {
     try {
-      await sleep(1000);
       const data = await prisma.article.findMany({
         where: {
           title: {

@@ -2,7 +2,7 @@ import type { ActionFunction } from 'remix';
 import { Form, json, redirect, useActionData, useTransition } from 'remix';
 
 import { MainLayout } from '../layouts/MainLayout';
-import { createArticle, isString, sleep } from '../lib/';
+import { createArticle, isString } from '../lib/';
 
 export const meta = () => {
   return {
@@ -18,7 +18,6 @@ export const action: ActionFunction = async ({ request }) => {
   const content = body.get('content');
 
   if (isString(title) && isString(content) && isString(author)) {
-    await sleep(2000);
     await createArticle({ title, author, content });
 
     return redirect('/');

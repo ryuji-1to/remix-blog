@@ -18,7 +18,7 @@ import {
 
 import { ErrorMessage } from '~/components/ErrorMessage';
 import { prisma } from '~/db.server';
-import { editArticle, isString, sleep } from '~/lib';
+import { editArticle, isString } from '~/lib';
 
 export const action: ActionFunction = async ({ request, params }) => {
   const formData = await request.formData();
@@ -39,7 +39,6 @@ export const action: ActionFunction = async ({ request, params }) => {
   }
 
   if (isString(title) && isString(author) && isString(content)) {
-    await sleep(1000);
     await editArticle(Number(params.slug), {
       title,
       author,
