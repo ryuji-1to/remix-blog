@@ -52,7 +52,7 @@ export default function SlugRoute() {
         <Link to="./edit">
           <button
             type="button"
-            className="p-2 font-bold text-white bg-blue-500 border border-blue-500 rounded-md hover:bg-white hover:text-blue-500"
+            className="px-2 py-1 font-bold text-white bg-blue-500 border border-blue-500 rounded-md hover:bg-white hover:text-blue-500"
           >
             Edit
           </button>
