@@ -1,7 +1,8 @@
 import type { Article } from '@prisma/client';
 import type { ErrorBoundaryComponent, LoaderFunction } from 'remix';
-import { Form, Link, useCatch, useLoaderData, useTransition } from 'remix';
+import { Link, useCatch, useLoaderData, useTransition } from 'remix';
 
+import { ErrorMessage } from '~/components/ErrorMessage';
 import { prisma } from '~/db.server';
 import { sleep } from '~/lib';
 
@@ -35,14 +36,6 @@ export default function SearchIndex() {
 
   return (
     <div>
-      <Form method="get" className="mb-2">
-        <input
-          type="text"
-          className="p-2 text-lg border rounded-md"
-          name="search"
-          placeholder="text me"
-        />
-      </Form>
       <section className="prose">
         <h2>Search Results</h2>
         <ul>
@@ -66,18 +59,7 @@ export default function SearchIndex() {
 }
 
 export const ErrorBoundary: ErrorBoundaryComponent = ({ error }) => {
-  return (
-    <div>
-      <Form method="get">
-        <input
-          type="text"
-          className="p-2 text-lg border rounded-md"
-          name="search"
-        />
-      </Form>
-      <p>{error.message}</p>
-    </div>
-  );
+  return <ErrorMessage error={error.message} />;
 };
 
 export const CatchBoundary = () => {
@@ -85,13 +67,6 @@ export const CatchBoundary = () => {
   if (caught.status === 400) {
     return (
       <div>
-        <Form method="get">
-          <input
-            type="text"
-            className="p-2 text-lg border rounded-md"
-            name="search"
-          />
-        </Form>
         <p>caught error!!!</p>
       </div>
     );
