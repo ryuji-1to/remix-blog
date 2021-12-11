@@ -37,7 +37,7 @@ export default function IndexRoute() {
     <MainLayout
       rightElement={
         <div className="flex space-x-2">
-          <PageLinkButton to="/search" label="Search" />
+          <PageLinkButton to="/search" label="Search" className="bg-gray-500" />
           <PageLinkButton to="/new" label="New Post" />
         </div>
       }

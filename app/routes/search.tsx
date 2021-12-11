@@ -10,7 +10,8 @@ export default function SearchRoute() {
           type="text"
           className="p-2 text-lg border rounded-md"
           name="search"
-          placeholder="text me"
+          placeholder="Search text here"
+          required
         />
       </Form>
       <Outlet />
