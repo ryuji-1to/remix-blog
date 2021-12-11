@@ -69,7 +69,7 @@ export default function NewArticle() {
           <button
             type="submit"
             disabled={!!transition.submission}
-            className="px-4 py-2 text-white bg-blue-300 border border-blue-300 rounded-md hover:bg-white hover:text-blue-300"
+            className="text-white bg-blue-500 btn"
           >
             {transition.submission ? 'posting...' : 'Submit'}
           </button>

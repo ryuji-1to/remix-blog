@@ -34,13 +34,20 @@ export default function IndexRoute() {
   const data = useLoaderData<Article[]>();
 
   return (
-    <MainLayout rightElement={<PageLinkButton to="/new" label="New Post" />}>
+    <MainLayout
+      rightElement={
+        <div className="flex space-x-2">
+          <PageLinkButton to="/search" label="Search" />
+          <PageLinkButton to="/new" label="New Post" />
+        </div>
+      }
+    >
       <nav>
         <h1 className="mb-2 text-xl font-bold">📚Articles</h1>
         <ul className="flex flex-col space-y-2">
           {data?.map((article: Article) => {
             return (
-              <li key={article.id}>
+              <li key={article.id} className="w-fit">
                 <Link to={`/articles/${article.id}`} className="line-clamp-1">
                   👉{' '}
                   <span className="text-lg hover:underline">
