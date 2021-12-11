@@ -5,7 +5,7 @@ import type {
   LoaderFunction,
   MetaFunction,
 } from 'remix';
-import { Form, Link, useCatch, useLoaderData, useParams } from 'remix';
+import { useCatch, useLoaderData, useParams } from 'remix';
 
 import { ErrorMessage } from '~/components/ErrorMessage';
 
@@ -48,16 +48,6 @@ export default function SlugRoute() {
         <p className="text-xl">{data?.content}</p>
         <p>author 👉 {data?.author}</p>
       </article>
-      <Form method="post">
-        <Link to="./edit">
-          <button
-            type="button"
-            className="px-2 py-1 font-bold text-white bg-blue-500 border border-blue-500 rounded-md hover:bg-white hover:text-blue-500"
-          >
-            Edit
-          </button>
-        </Link>
-      </Form>
     </>
   );
 }

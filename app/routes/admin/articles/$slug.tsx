@@ -4,6 +4,7 @@ import type {
   ErrorBoundaryComponent,
   LoaderFunction,
 } from 'remix';
+import { Link } from 'remix';
 import { Form, redirect, useCatch, useLoaderData, useParams } from 'remix';
 
 import { ErrorMessage } from '~/components/ErrorMessage';
@@ -29,16 +30,23 @@ export const loader: LoaderFunction = async ({ params }) => {
 
 export default function AdminSlugRoute() {
   const data = useLoaderData<Article>();
+  const params = useParams();
 
   return (
     <article className="prose">
       <h2>{data?.title}</h2>
       <p>{data?.content}</p>
       <p>author 👉 {data.author}</p>
-      <Form method="delete">
-        <button type="submit" className="font-bold text-red-500 ">
+      <Form method="delete" className="space-x-4">
+        <button type="submit" className="font-bold text-red-500">
           Delete
         </button>
+        <Link
+          to={`articles/${params.slug}/edit`}
+          className="font-bold text-blue-500 no-underline"
+        >
+          Edit
+        </Link>
       </Form>
     </article>
   );
