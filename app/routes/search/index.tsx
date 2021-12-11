@@ -32,6 +32,7 @@ export const loader: LoaderFunction = async ({ request }) => {
       throw Error('unhandled error');
     }
   }
+  await prisma.$disconnect();
   throw new Response('Search query is empty', {
     status: 400,
   });

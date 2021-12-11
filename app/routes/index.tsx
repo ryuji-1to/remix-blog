@@ -1,5 +1,4 @@
 import type { Article } from '@prisma/client';
-import { PrismaClient } from '@prisma/client';
 import type {
   ErrorBoundaryComponent,
   LoaderFunction,
@@ -9,10 +8,10 @@ import { Link, useLoaderData } from 'remix';
 
 import { ErrorMessage } from '~/components/ErrorMessage';
 import { PageLinkButton } from '~/components/PageLinkButton';
+import { prisma } from '~/db.server';
 import { MainLayout } from '~/layouts/MainLayout';
 
 export const loader: LoaderFunction = async () => {
-  const prisma = new PrismaClient();
   try {
     const articles = await prisma.article.findMany();
     await prisma.$disconnect();
