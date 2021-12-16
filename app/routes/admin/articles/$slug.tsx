@@ -16,7 +16,7 @@ export const action: ActionFunction = async ({ params }) => {
   }
   await deleteArticle(params.slug);
 
-  return redirect('/admin/articles');
+  return redirect('/admin');
 };
 
 export const loader: LoaderFunction = async ({ params }) => {

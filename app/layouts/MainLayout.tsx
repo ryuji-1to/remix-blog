@@ -11,7 +11,7 @@ export const MainLayout = (props: Props) => {
   return (
     <div className="h-full">
       <Header rightElement={props.rightElement} />
-      <main className="max-w-6xl p-10 mx-auto">{props.children}</main>
+      <main className="max-w-6xl p-8 mx-auto">{props.children}</main>
     </div>
   );
 };

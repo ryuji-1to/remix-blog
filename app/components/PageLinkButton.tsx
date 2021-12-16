@@ -10,7 +10,7 @@ export const PageLinkButton = (props: Props) => {
   return (
     <Link
       to={props.to}
-      className={`p-2 font-bold text-white bg-blue-500 rounded-lg shadow-sm ${props.className}`}
+      className={`p-2 font-bold text-white bg-blue-500 rounded-lg shadow-sm text-sm sm:text-base ${props.className}`}
     >
       {props.label}
     </Link>
